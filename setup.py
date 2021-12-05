@@ -2,7 +2,7 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 setuptools.setup(
-    name="scsampler-dongyuan", # Replace with your own username
+    name="scsampler", # Replace with your own username
     version="0.0.1",
     author="Dongyuan Song",
     author_email="dongyuansong@ucla.edu",
