@@ -36,9 +36,11 @@ end = time()
 print(end - start)
 ```
 ### matrix as input
+You can also use the `numpy.ndarray` as the input.
 ```{python}
 mat = adata.obsm['X_pca']
 print(type(mat))
 res = scsampler(mat, fraction = 0.1, obsm = 'X_pca', copy = True, random_split = 16)
 subsample_index = res[1]
+subsample_mat = res[0]
 ```
