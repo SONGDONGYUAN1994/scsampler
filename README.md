@@ -30,7 +30,7 @@ adata = sc.read_h5ad('/home/dongyuan/scSampler/data/final_h5ad/pbmc68k.h5ad')
 ### anndata as input
 Subsample 10% cells and return a new anndata. The space is top PCs.
 ```{python}
-adata_sub = scsampler(adata, fraction = 0.1, obsm = 'X_pca', copy = True) 
+adata_sub = scsampler(adata, fraction = 0.1, copy = True) 
 ```
 If you want to speed it up, you can use the `random_split`. It will lead to slightly less optimal result, of course.
 ```{python}
@@ -44,7 +44,7 @@ You can also use the `numpy.ndarray` as the input.
 ```{python}
 mat = adata.obsm['X_pca']
 print(type(mat))
-res = scsampler(mat, fraction = 0.1, obsm = 'X_pca', copy = True, random_split = 16)
+res = scsampler(mat, fraction = 0.1, copy = True, random_split = 16)
 subsample_index = res[1]
 subsample_mat = res[0]
 ```
