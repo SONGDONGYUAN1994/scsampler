@@ -10,7 +10,6 @@ pip install scsampler
 ```
 
 ## Quick start
-The example data can be downloaded from https://doi.org/10.5281/zenodo.5811787 in the `anndata` format by `scanpy`.
 First we load all modules.
 ```python
 import numpy as np
@@ -22,10 +21,15 @@ sc.settings.verbosity = 3             # verbosity: errors (0), warnings (1), inf
 sc.logging.print_header()
 sc.settings.set_figure_params(dpi=80, facecolor='white')
 ```
+### Read in data
+The example data can be downloaded from https://doi.org/10.5281/zenodo.5811787 in the `anndata` format by `scanpy`. Here we use the ~68'000 PBMC cells. Please modify the path as your own path.
+```{python}
+adata = sc.read_h5ad('/home/dongyuan/scSampler/data/final_h5ad/pbmc68k.h5ad')
+```
+
 ### anndata as input
 Subsample 10% cells and return a new anndata. The space is top PCs.
 ```{python}
-adata = sc.read_h5ad('/home/dongyuan/scSampler/data/final_h5ad/pbmc68k.h5ad')
 adata_sub = scsampler(adata, fraction = 0.1, obsm = 'X_pca', copy = True) 
 ```
 If you want to speed it up, you can use the `random_split`. It will lead to slightly less optimal result, of course.
