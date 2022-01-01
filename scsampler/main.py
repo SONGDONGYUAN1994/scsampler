@@ -21,7 +21,7 @@ def scsampler(
     random_split: Optional[int] = None,
 ) -> Optional[AnnData]:
     """\
-    Subsample to a fraction of the number of observations.
+    Subsample to a fraction of the number of observations. This function refers to the subsample function in scanpy. 
     Parameters
     ----------
     data

@@ -48,3 +48,6 @@ res = scsampler(mat, fraction = 0.1, copy = True, random_split = 16)
 subsample_index = res[1]
 subsample_mat = res[0]
 ```
+
+## Contact
+Any questions or suggestions on `scSampler` are welcomed! If you have any questions, please report it on [issues](https://github.com/SONGDONGYUAN1994/scsampler/issues) or contact Dongyuan (<dongyuansong@ucla.edu>).
