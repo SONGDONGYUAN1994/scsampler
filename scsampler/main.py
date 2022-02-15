@@ -9,7 +9,7 @@ from typing import Union, Optional, Tuple, Collection, Sequence, Iterable
 import scipy as sp
 from scipy.spatial import distance
 from scipy.sparse import issparse, isspmatrix_csr, csr_matrix, spmatrix
-from .uclab import uclab, uclab_split
+from uclab import uclab, uclab_split
 
 def scsampler(
     data: Union[AnnData, np.ndarray, spmatrix],
@@ -69,4 +69,7 @@ def scsampler(
             data._inplace_subset_obs(obs_indices)
     else:
         X = data
-        return X[obs_indices], obs_indices
+        if copy:
+            return X[obs_indices], obs_indices
+        else:
+            return obs_indices
