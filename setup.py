@@ -3,7 +3,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 setuptools.setup(
     name="scsampler", # Replace with your own username
-    version="1.0.0",
+    version="1.0.1",
     author="Dongyuan Song",
     author_email="dongyuansong@ucla.edu",
     description="A package for fast diversity-preserving subsampling of large-scale single-cell transcriptomic data",
