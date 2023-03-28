@@ -12,7 +12,7 @@ from anndata import AnnData
 from numbers import Number
 import warnings
 from typing import Union, Optional, Tuple, Collection, Sequence, Iterable
-import scipy as sp
+import scipy
 from scipy.spatial import distance
 from scipy.sparse import issparse, isspmatrix_csr, csr_matrix, spmatrix
 from uclab import uclab, uclab_split
