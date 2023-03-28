@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[2]:
+
+
 import numpy as np
 import pandas as pd
 import scanpy as sc
@@ -10,18 +16,20 @@ import scipy as sp
 from scipy.spatial import distance
 from scipy.sparse import issparse, isspmatrix_csr, csr_matrix, spmatrix
 from uclab import uclab, uclab_split
+import pyarrow as pa
+from pyarrow import ChunkedArray
 
 def scsampler(
-    data: Union[AnnData, np.ndarray, spmatrix],
+    data: Union[AnnData, np.ndarray, spmatrix,ChunkedArray],
     fraction: Optional[float] = None,
     n_obs: Optional[int] = None,
     random_state: int = 0,
     copy: bool = False,
     obsm: Optional[str] = 'X_pca',
+    dr_num: Optional[int]=None,
     random_split: Optional[int] = None,
 ) -> Optional[AnnData]:
-    """\
-    Subsample to a fraction of the number of observations. This function refers to the subsample function in scanpy. 
+    """    Subsample to a fraction of the number of observations. This function refers to the subsample function in scanpy. 
     Parameters
     ----------
     data
@@ -42,13 +50,50 @@ def scsampler(
     subsamples the passed :class:`~anndata.AnnData` (`copy == False`) or
     returns a subsampled copy of it (`copy == True`).
     """
+
+    """    Subsample to a fraction of the number of observations.  
+    Parameters
+    ----------
+    data
+        pyarrow.ChunkedArray
+    fraction
+        Subsample to this `fraction` of the number of observations.
+    n_obs
+        Subsample to this number of observations.
+    random_state
+        Random seed to change subsampling.
+    copy
+        If an :class:`~anndata.AnnData` is passed,
+        determines whether a copy is returned.
+    dr_num
+       If data format is pyarrow.ChunkedArray,
+       The number of dimensions.
+    Returns
+    -------
+    Returns `X[obs_indices], obs_indices` if data is array-like, otherwise
+    subsamples the passed :class:`~anndata.AnnData` (`copy == False`) or
+    returns a subsampled copy of it (`copy == True`).
+    """              
     ## Sample space
-    X = data.obsm[obsm] if isinstance(data, AnnData) else data
+    if isinstance(data, AnnData):
+        X = data.obsm[obsm]
+        old_n_obs = data.n_obs
+        old_n_vars = X.shape[1]
+    elif isinstance(data, ChunkedArray):
+        X = data.to_numpy()
+        X = scipy.sparse.coo_matrix((X, (obs_dim, var_dim))).tocsr()
+        old_n_obs = X.shape[0]
+        old_n_vars = X.shape[1]
+    else: 
+        data
+        old_n_obs = data.shape[0]
+        old_n_vars = X.shape[1]
     
     np.random.seed(random_state)
-    old_n_obs = data.n_obs if isinstance(data, AnnData) else data.shape[0]
-    old_n_vars = X.shape[1]
     
+    if dr_num is not None:
+        svd = TruncatedSVD(dr_num)
+        X = svd.fit_transform(X)
     if n_obs is not None:
         new_n_obs = n_obs
     elif fraction is not None:
@@ -67,9 +112,21 @@ def scsampler(
             return data[obs_indices].copy()
         else:
             data._inplace_subset_obs(obs_indices)
+    elif isinstance(data, ChunkedArray):
+        if copy:
+            return X[obs_indices,:].copy(),obs_indices
+        else:
+            return X[obs_indices,:],obs_indices
     else:
         X = data
         if copy:
             return X[obs_indices], obs_indices
         else:
             return obs_indices
+
+
+# In[ ]:
+
+
+
+
