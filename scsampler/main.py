@@ -18,6 +18,7 @@ from scipy.sparse import issparse, isspmatrix_csr, csr_matrix, spmatrix
 from uclab import uclab, uclab_split
 import pyarrow as pa
 from pyarrow import ChunkedArray
+from sk.decomposition import TruncatedSVD
 
 def scsampler(
     data: Union[AnnData, np.ndarray, spmatrix,ChunkedArray],
