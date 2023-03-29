@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[3]:
 
 
 import numpy as np
@@ -27,6 +27,8 @@ def scsampler(
     copy: bool = False,
     obsm: Optional[str] = 'X_pca',
     dr_num: Optional[int]=None,
+    obs_index: int = 0,
+    var_index: int = 0,
     random_split: Optional[int] = None,
 ) -> Optional[AnnData]:
     """    Subsample to a fraction of the number of observations. This function refers to the subsample function in scanpy. 
@@ -68,6 +70,10 @@ def scsampler(
     dr_num
        If data format is pyarrow.ChunkedArray,
        The number of dimensions.
+    obs_index
+       Reset the cell indeces to go from 0 to N (number of cells in the query) 
+    var_index
+       Reset the gene indeces to go from 0 to N (number of genes in the query)
     Returns
     -------
     Returns `X[obs_indices], obs_indices` if data is array-like, otherwise
@@ -81,7 +87,7 @@ def scsampler(
         old_n_vars = X.shape[1]
     elif isinstance(data, ChunkedArray):
         X = data.to_numpy()
-        X = scipy.sparse.coo_matrix((X, (obs_dim, var_dim))).tocsr()
+        X = scipy.sparse.coo_matrix((X, (obs_index, var_index))).tocsr()
         old_n_obs = X.shape[0]
         old_n_vars = X.shape[1]
     else: 
