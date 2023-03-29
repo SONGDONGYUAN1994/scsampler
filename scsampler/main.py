@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[3]:
+# In[6]:
 
 
 import numpy as np
@@ -18,7 +18,7 @@ from scipy.sparse import issparse, isspmatrix_csr, csr_matrix, spmatrix
 from uclab import uclab, uclab_split
 import pyarrow as pa
 from pyarrow import ChunkedArray
-from sk.decomposition import TruncatedSVD
+from sklearn.decomposition import TruncatedSVD
 
 def scsampler(
     data: Union[AnnData, np.ndarray, spmatrix,ChunkedArray],
