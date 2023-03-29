@@ -94,7 +94,7 @@ def scsampler(
     else: 
         data
         old_n_obs = data.shape[0]
-        old_n_vars = X.shape[1]
+        old_n_vars = data.shape[1]
     
     np.random.seed(random_state)
     
