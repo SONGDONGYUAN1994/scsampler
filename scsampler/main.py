@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[6]:
+# In[11]:
 
 
 import numpy as np
@@ -92,9 +92,9 @@ def scsampler(
         old_n_obs = X.shape[0]
         old_n_vars = X.shape[1]
     else: 
-        data
-        old_n_obs = data.shape[0]
-        old_n_vars = data.shape[1]
+        X = data
+        old_n_obs = X.shape[0]
+        old_n_vars = X.shape[1]
     
     np.random.seed(random_state)
     
@@ -125,7 +125,6 @@ def scsampler(
         else:
             return X[obs_indices,:],obs_indices
     else:
-        X = data
         if copy:
             return X[obs_indices], obs_indices
         else:
