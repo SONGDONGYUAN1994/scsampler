@@ -1,7 +1,10 @@
 import numpy as np
 from scipy.spatial import distance
 from scipy.sparse import issparse, isspmatrix_csr, csr_matrix, spmatrix
-    
+from miniball import get_bounding_ball
+from math import sqrt
+import sys
+
 def uclab(X, n, alpha, drop_start=1, drop_rate=0):
     N = X.shape[0]
     sample_index = np.full(n, -1, dtype=int)
@@ -10,6 +13,11 @@ def uclab(X, n, alpha, drop_start=1, drop_rate=0):
     # Define function
     #int64 = np.int64
     
+    # Normalize the input matrix by bound sphere of a small subset to avoid the overflow in distance calculation.
+    radius_index = np.random.randint(N, size=100)
+    Center_pos, r2 = get_bounding_ball(X[radius_index,:])
+    r = sqrt(r2)
+    X = X/r
     # step 0
     initial_index = np.random.randint(N, size=1)
     sample_index[0] = initial_index
@@ -17,6 +25,10 @@ def uclab(X, n, alpha, drop_start=1, drop_rate=0):
     distances[initial_index] = -1
     d_index = np.argwhere(distances != -1).flatten()
     distances[d_index] = np.power(1/distances[d_index], alpha)
+    
+    if np.count_nonzero(distances[d_index]) < N-1:
+        sys.exit("The alpha is too large and distance calculation gets an overflow. Please decrease alpha or normalize your data.")
+    
     
     for i in np.arange(1,n):
         #print(i, end=' ')

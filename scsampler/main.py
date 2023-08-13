@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[11]:
-
-
 import numpy as np
 import pandas as pd
 import scanpy as sc
@@ -12,11 +9,9 @@ from anndata import AnnData
 from numbers import Number
 import warnings
 from typing import Union, Optional, Tuple, Collection, Sequence, Iterable
-import scipy
 from scipy.spatial import distance
 from scipy.sparse import issparse, isspmatrix_csr, csr_matrix, spmatrix
 from uclab import uclab, uclab_split
-import pyarrow as pa
 from pyarrow import ChunkedArray
 from sklearn.decomposition import TruncatedSVD
 
@@ -25,6 +20,7 @@ def scsampler(
     fraction: Optional[float] = None,
     n_obs: Optional[int] = None,
     random_state: int = 0,
+    alpha: int = 50,
     copy: bool = False,
     obsm: Optional[str] = 'X_pca',
     dr_num: Optional[int]=None,
@@ -44,6 +40,8 @@ def scsampler(
         Subsample to this number of observations.
     random_state
         Random seed to change subsampling.
+    alpha
+        The power of distance in calculation. A large alpha will lead to better diversity, but too large will cause overflow.
     copy
         If an :class:`~anndata.AnnData` is passed,
         determines whether a copy is returned.
@@ -112,7 +110,7 @@ def scsampler(
     
     ## Run uclab
     split = 1 if random_split is None else random_split
-    obs_indices = uclab_split(X, new_n_obs, alpha = 4 * old_n_vars, drop_start=1, drop_rate=0, split=split)
+    obs_indices = uclab_split(X, new_n_obs, alpha = alpha, drop_start=1, drop_rate=0, split=split)
     
     if isinstance(data, AnnData):
         if copy:
@@ -129,10 +127,3 @@ def scsampler(
             return X[obs_indices], obs_indices
         else:
             return obs_indices
-
-
-# In[ ]:
-
-
-
-
